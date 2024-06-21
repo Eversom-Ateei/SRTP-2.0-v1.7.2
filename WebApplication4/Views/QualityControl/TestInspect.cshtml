@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Teste de Produtos";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;">Teste de Produtos</h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ordem</th>
+                        <th>Cód. do Item</th>
+                        <th>Descrição</th>
+                        <th>Quantidade</th>
+                        <th>Data da Postagem</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+
+                    @while (ViewBag.data.Read())
+                    {
+                        <tr ondblclick="alert(@ViewBag.data["ID_RG_TEMPO"])">
+
+                            <td>@ViewBag.data["ID_RG_TEMPO"]</td>
+                            <td>@ViewBag.data["ORDEM"]</td>
+                            <td>@ViewBag.data["ItemCode"]</td>
+                            <td>@ViewBag.data["ItemName"]</td>
+                            <td>@ViewBag.data["Quantity"]</td>
+                            <td>@ViewBag.data["TERMINO"]</td>
+
+                        </tr>
+                    }@ViewBag.data.Close();
+
+                </tbody>
+            </table>
+        </div>
+    </body>
+}
+
+

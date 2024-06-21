@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Inspeção de Rotas";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;font-size-adjust:inherit;">Inspeção Rotas</h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th>Setup</th>
+                        <th>Ordem</th>
+                        <th>Começou em:</th>
+                        <th>Finalizado em:</th>
+                        <th>Acão</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+                    @while (ViewBag.data.Read())
+                    {
+                        <tr ondblclick="ProductionSetupLine(@ViewBag.data["ID"])">
+                            <td>@ViewBag.data["ID"]</td>
+                            <td>@ViewBag.data["DocEntry"]</td>
+                            <td>@ViewBag.data["StartDate"]</td>
+                            <td>@ViewBag.data["EndDate"]</td>
+
+                            @if(ViewBag.data["EndDate"].ToString() == "")
+                            {
+                                <td>
+                                    <div style="background-image: url('../img/IconPower.png');" class="icon20x20" id="linkCloseSetup" onclick="CloseSetup(@ViewBag.data["ID"])"></div>
+                                </td>
+                            }
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </body>
+}
+
+

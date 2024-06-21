@@ -1,0 +1,1 @@
+﻿Ao Atualizar o .js sempre atualizar o nome e alterar na pagina Home.cshtml para atualizar o script no terminal do usuario.

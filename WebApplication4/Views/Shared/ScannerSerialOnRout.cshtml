@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "Scanner Serial";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int line = 1;
+}
+
+
+@if (ViewBag.userSession == "false" || ViewBag.TimeRegisterIsClosed=="1")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+<script>
+    var total = 0;
+    $(document).ready(function () {
+
+        $('#serial').focus();
+
+
+        var total = $('table tbody tr').length;
+
+        $('#tbCount').html('Total: ' + total);
+
+        $("#serial").keyup(function (event) {
+
+            if (event.which === 13) {
+
+                AddSerialRout(@ViewBag.docEntry,@ViewBag.sequence,@ViewBag.posId,@ViewBag.idRgSetup,@ViewBag.timeRegisterId, '@ViewBag.resource', @ViewBag.userSession);
+                $("#serial").prop("disabled", true);
+            }
+        });
+
+          $("#code").keyup(function (event) {
+
+            if (event.which === 13) {
+
+                AddSetItems( @ViewBag.idRgSetup,@ViewBag.docEntry);
+
+            }
+          });
+
+
+
+        })
+
+
+</script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;" class="form-control">N° de Séries</h6>
+        <div class="container">
+            <!--<video id="video"></video>-->
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+
+
+
+            <div style="float:left">
+                <button onclick="SetItems(@ViewBag.idRgSetup,@ViewBag.docEntry)" id="save" type="button" class="btn btn-secondary btn-sm" style="float: left; margin-bottom : 5%">Setup</button>
+            </div>
+
+            <div style="float:right ">
+                <button onclick="CloseTimeRegister(@ViewBag.timeRegisterId,0)" id="save" type="button" class="btn btn-secondary btn-sm" style="float: right; margin-left: 90% ; margin-bottom : 5%">Fechar Tempo</button>
+            </div>
+
+            <div class="input-group mb-3">
+
+                <input class="form-control" id="quantity" type="text" value="1" width="10px">
+                <input class="form-control" id="serial" type="text" placeholder="Adicionar Nº de Série ou Lote...">
+                <button class="form-control" id="tbCount" type="button" value="+" width="10px" />
+            </div>
+            <br>
+
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" data-bs-toggle="tooltip" data-bs-html="true" title="ATEEI_SRTP_RG_N_SERIE_RECURSO.N_SERIE">Serial/Lote</th>
+                        <th scope="col" data-bs-toggle="tooltip" data-bs-html="true" title="ATEEI_SRTP_RG_N_SERIE_RECURSO.Quantity">Quantidade</th>
+
+                    </tr>
+                </thead>
+                <tbody id="data">
+
+                    @while (ViewBag.data.Read())
+                    {
+                        <tr ondblclick="">
+
+                            <td>@line</td>
+                            <td data-bs-toggle="tooltip" data-bs-html="true" title="ATEEI_SRTP_RG_N_SERIE_RECURSO.N_SERIE">@ViewBag.data["N_serie"]</td>
+                            <td data-bs-toggle="tooltip" data-bs-html="true" title="ATEEI_SRTP_RG_N_SERIE_RECURSO.Quantity">@ViewBag.data["Quantity"]</td>
+                            <td> <div style="background-image: url('../img/IconTrace.png');" class="icon20x20" style="color: black ; font-size: 15px; " onclick="ProductTrace('@ViewBag.data["N_serie"]', @ViewBag.data["PosId"],@ViewBag.data["ORDEM"])"></div></td>
+
+                            <td><div style="background-image: url('../img/consulta.png');" class="icon20x20" id="linkListTraceBatch" style="color: black ; font-size: 15px; " onclick="ListTraceBatch('@ViewBag.data["N_serie"]')"></div></td>
+                            <td><div style="background-image: url('../img/IconTest.png');" class="icon20x20" id="linkCloseTimeRegiste" style="color: black ; font-size: 15px; " onclick="ProductTest('@ViewBag.data["N_serie"]',@ViewBag.data["PosId"],@ViewBag.data["ORDEM"],@ViewBag.timeRegisterId)"></div></td>
+                            <td> <div style="background-image: url('../img/IconError.png');" class="icon20x20" id="linkCloseTimeRegiste" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#id_@ViewBag.data["ID"]" ondblclick="ProductionFlaw('@ViewBag.data["N_serie"]','@ViewBag.resource',@ViewBag.docEntry,@ViewBag.posId)"></div>
+                            <td> <div style="background-image: url('../img/delete.png');" class="icon20x20" id="linkCloseTimeRegiste" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#id_@ViewBag.data["ID"]" ondblclick=" DeleteSerialRout('@ViewBag.data["ID"]')"></div>
+
+                        </tr>
+                        line++;
+                    }
+
+                </tbody>
+            </table>
+
+
+
+
+
+            <h4 id="linkmodal" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#ModalSetItems" hidden>modal</h4>
+
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="ModalSetItems">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="input-group mb-3">
+
+                            <input class="form-control" id="code" type="text" placeholder="Adicionar Material" />
+
+                        </div>
+
+
+                        <table id="setItems" class="table table-bordered" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+
+                            <!--Load by jquery-->
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <h4 id="linkModalList" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#ModalListTraceBatch" hidden>modal</h4>
+
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="ModalListTraceBatch">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                 
+
+                        <table id="listTraceBatch" class="table table-bordered" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+
+                            <!--Load by jquery-->
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+</body>
+
+
+}

@@ -1,0 +1,246 @@
+﻿
+@{
+    ViewBag.Title = "Inspeção de Materiais";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int i = 0;
+    string cl ="table-secondary";
+ int SpN = 1;
+}
+@try
+{
+    if (ViewBag.userSession == "false")
+    {
+<div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+
+    }
+    else
+    {
+<script>
+
+
+</script>
+
+<Body>
+    <h6 style="font-family:Calibri;text-align:center;" class="form-control">Inspeção de Materiais</h6>
+    <div class="container">
+        <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar..." />
+        <br />
+
+        <div>
+            <a tabindex="0" data-toggle="modal" data-trigger="focus" title="Informações:" data-content="Descrição: 554dd dfvsrfvfvsfdbsfgnhgnvgmjmvjh ddddd" data-target="#ModalItens">
+                <div style="background-image: url('../img/IconInfo.png'); width: 20px; height:20px; float:right;  " class="icon20x20X"></div>
+
+
+            </a>
+
+            <h5 style="float:left;">@ViewBag.itemCode - @ViewBag.itemName</h5>
+
+            <button onclick="SaveTableMaterialInspectLines()" id="save" type="button" class="btn btn-secondary btn-sm" style="float: left; margin-left: 94% ; margin-bottom : 1%" ; disabled>Salvar</button>
+        </div>
+
+        <table id="table" class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+            <thead>
+                <tr>
+                    <th scope="col">N° da Amostra</th>
+                    <th scope="col">Código</th>
+                    <th scope="col">Descrição </th>
+                    <th scope="col">Mínimo </th>
+                    <th scope="col">Máximo</th>
+                    <th scope="col">Meta</th>
+                    <th scope="col">Medição</th>
+                    <th scope="col">Quantidade Bloqueada</th>
+                    <th scope="col">Comentários</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Motivo</th>
+                    <th scope="col">Ferramenta</th>
+                </tr>
+            </thead>
+            <tbody id="data">
+
+                @foreach (MaterialInspectLine data in ViewBag.data)
+                 {
+                            ///cast vars
+
+                            double blockQty = (double)(@data.BlockQty);
+
+
+                    @if(data.SampleNumber != SpN)
+                     {
+                        SpN = data.SampleNumber;
+
+                        if(cl == "table-light" )
+                        {
+                            cl = "table-secondary";
+                        }
+                        else
+                        {
+                            if(cl == "table-secondary" )
+                            {
+                                cl = "table-light";
+                            }
+                        }
+
+                     }
+
+
+                   <tr class="@cl">
+                        <td>@data.SampleNumber</td>
+                        <td>@data.ParamId</td>
+                        <td>@data.Description</td>
+                        <td><input id="minimun_@i" type="text" value="@data.Minimun" class="form-control tab maxlength" onkeyup="StatusButton('save', 'Salvar')" maxlength="100" /></td>
+                        <td><input id="maximun_@i" type="text" value="@data.Maximun" class="form-control tab maxlength" onkeyup="StatusButton('save', 'Salvar')" maxlength="100"/></td>
+                        <td><input id="mark_@i" type="text" value="@data.Mark" class="form-control tab  maxlength" onkeyup="StatusButton('save', 'Salvar')" maxlength="100" /></td>
+
+                        <td><input id="measurement_@i" name="measurement" type="text" value="@data.Measurement" class="form-control tab  maxlength" onkeyup="StatusButton('save', 'Salvar')" maxlength="36" /></td>
+                        <td><input id="blockQty_@i" name="blockQty" type="text" value="@blockQty" class="form-control tab  maxlength" onkeyup="ValidateFieldDouble('blockQty_@i'); StatusButton('save', 'Salvar')" onblur="ValidateFieldMaxRange('blockQty_@i', @data.Quantity.ToString().Replace(",","."),@data.SampleQty.ToString().Replace(",",".")); ChangeStatusByBlockQty('blockQty_@i', 'status_@i', @data.Quantity.ToString().Replace(",",".")) " /></td>
+
+                        <td><input type="text" id="comments_@i" name="comments" class="form-control tab  maxlength" value="@data.Comments" onkeyup="StatusButton('save', 'Salvar')" /></td>
+
+                        <td> <input type="hidden" id="statusOld_@i" value="@data.Status">
+                        <select class="custom-select" id="status_@i" onblur=" ChangeforStatusMaterialInspectLines(@i)" onchange="StatusButton('save', 'Salvar')">
+
+                            @if (@data.Status == "Y")
+                             {
+                                <option value="Y" selected>Aprovado</option>
+                             }
+                             else
+                             {
+                                <option value="Y">Aprovado</option>
+                             }
+                            @if (@data.Status == "B")
+                             {
+                                <option value="B" selected>Bloqueado</option>
+                             }
+                             else
+                             {
+                                <option value="B">Bloqueado</option>
+                             }
+
+                            @if (@data.Status == "N")
+                             {
+                                <option value="N" selected>...</option>
+                             }
+                             else
+                             {
+                                <option value="N">...</option>
+                             }
+
+                        </select>
+                        </td>
+                        <td>
+                            <select class="custom-select" id="reason_@i" onchange="StatusButton('save', 'Salvar')">
+                            {
+                            @if (@data.Reason == null)
+                             {
+                                <option selected value="...">...</option>
+                             }
+                             else
+                             {
+                                <option value="@data.Reason" selected>@data.Reason</option>
+                             }
+                            @foreach (BlockReason reason in ViewBag.Reason)
+                             {
+                                <option value="@reason.Reason">@reason.Reason</option>
+                             }
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select tab" id="toolCod_@i" onchange="StatusButton('save', 'Salvar')" >
+
+                            @if (@data.ToolCod != "")
+                             {
+                                <option value=""></option>
+                                <option value="@data.ToolCod" selected>@data.ToolCod</option>
+                             }
+                             else
+                             {
+                                <option value="" selected></option>
+                             }
+
+                            @foreach (ProductionTool tools in ViewBag.Tools)
+                             {
+                                <option value="@tools.ToolCod">@tools.ToolCod</option>
+
+                             }
+                        </select>
+                    </td>
+                    <td>
+                        <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Inspecionado por:" data-content="@data.FirstName @data.LastName às @data.DateRelease ">
+                            @if (@data.Status == "Y")
+                                        {
+
+                            <div style="background-image: url('../img/IconCheck.png');" class="icon20x20"></div>
+                                        }
+                            @if (@data.Status == "B")
+                                        {
+                            <div style="background-image: url('../img/IconBlock.png');" class="icon20x20"></div>
+                                        }
+
+                            @if (@data.Status == "N")
+                                        {
+                            <div style="background-image: url('../img/IconWait.png'); text-align:center;" class="icon20x20"></div>
+                                        }
+                        </a>
+                    </td>
+
+
+                </tr>
+                <input type="hidden" id="materialInspectLinesId_@i" value="@data.Id" />
+                <input type="hidden" id="materialInspectId_@i" value="@data.Id_MaterialInspect" />
+                <input type="hidden" id="quantity_@i" value="@data.Quantity" />
+
+                  i++;
+                 }
+
+
+                <input type="hidden" id="count" value="@i" />
+
+
+              
+            </tbody>
+        </table>
+    </div>
+
+
+    <!---modal description itens-->
+    <div class="modal fade" id="ModalItens" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Informações</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <h7><b>Código:</b>@ViewBag.itemCode</h7><br>
+                    <h7><b>Nome:</b>@ViewBag.itemName</h7><br>
+                    <h7><b>Partnumber:</b>@ViewBag.partNumber</h7><br />
+                    <h7><b>Fabricante:</b>@ViewBag.manufacturer</h7><br />
+                    <h7><b>Sobre o Item:</b>@ViewBag.comments</h7><br />
+
+
+                </div>
+
+                <div class="modal-footer">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</Body>
+    }
+}
+catch (Exception e)
+{
+
+
+<h2>@e.Message</h2>
+
+}
+
+

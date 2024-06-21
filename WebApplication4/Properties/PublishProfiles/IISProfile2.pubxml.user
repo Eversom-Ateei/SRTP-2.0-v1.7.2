@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Esse arquivo é usado pelo processo de publicação/pacote do seu projeto Web. É possível personalizar o comportamento deste processo
+ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAg5y0h5VGDU2Xv0hYJPSEDAAAAAACAAAAAAADZgAAwAAAABAAAAA8izMOQGUJ+G6sCwYZzy+zAAAAAASAAACgAAAAEAAAANPO6vIr5qpiK9NC4+sWHf0gAAAAR47mE+pluZW9Qo3tZ/KO1+Iw6fB9r3vbmvIKo4FyBDUUAAAAu2NYU5G3qVidrXNZftzIEesv0fc=</EncryptedPassword>
+    <History>False|2022-12-08T19:42:02.0765996Z;False|2022-12-08T16:04:42.0498548-03:00;False|2022-12-08T16:04:16.9507112-03:00;True|2022-12-08T10:57:51.9383486-03:00;False|2022-12-07T16:57:35.3933588-03:00;False|2022-12-07T16:56:39.8017007-03:00;False|2022-12-07T16:54:49.9180753-03:00;False|2022-12-07T16:46:24.5526568-03:00;False|2022-12-07T16:23:47.5268363-03:00;False|2022-12-07T16:23:13.5523528-03:00;False|2022-12-07T16:22:37.9349655-03:00;False|2022-12-07T15:49:20.0444924-03:00;False|2022-12-07T15:48:11.2794492-03:00;False|2022-12-07T15:40:37.8830104-03:00;False|2022-12-07T15:39:51.3885940-03:00;False|2022-12-07T15:12:27.7883422-03:00;False|2022-12-07T13:57:03.4953477-03:00;</History>
+    <_PublishTargetUrl>ftp://homologacao/teste</_PublishTargetUrl>
+  </PropertyGroup>
+</Project>

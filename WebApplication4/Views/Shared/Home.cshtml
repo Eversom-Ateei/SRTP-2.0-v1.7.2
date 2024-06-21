@@ -1,0 +1,273 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!---css-->
+
+    <link href="~/css/bootstrap.css" rel="stylesheet">
+    <link href="~/css/srtp.css" rel="stylesheet">
+    <!-- <link href="~/css/chat.css" rel="stylesheet"> -->
+    <!--script-->
+    <!--first the jquery-->
+    <script src="~/js/jquery-3.3.1.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/md5.min.js"></script>
+    <script src="~/js/srtp-1.1.4.js"></script>
+    <script src="~/js/signalr.min.js"></script>
+
+    <script src="~/js/materialInspect-1.0.js"></script>
+    <script src="~/js/ProductTest-1.0.js"></script>
+    <script src="~/js/ProductTrace-1.0.js"></script>
+    <script src="~/js/TableSorter.js"></script>
+    <!-- Is necessary for use the dashboards -->
+    <script src="~/js/Charts.min.js"></script>
+
+
+    <style>
+
+
+        /* loading dots */
+
+        .loading:after {
+            content: ' |';
+            animation: dots 1s steps(5, end) infinite;
+            font: 300 1em/100% Impact;
+        }
+
+        @@keyframes dots {
+            0%, 20% {
+                color: rgba(0,0,0,1);
+                text-shadow: .25em 0 0 rgba(0,0,0,1), .5em 0 0 rgba(0,0,0,1);
+            }
+
+            40% {
+                color: white;
+                text-shadow: .25em 0 0 rgba(0,0,0,1), .5em 0 0 rgba(0,0,0,1);
+            }
+
+            60% {
+                text-shadow: .25em 0 0 white, .5em 0 0 rgba(0,0,0,1);
+            }
+
+            80%, 100% {
+                text-shadow: .25em 0 0 white, .5em 0 0 white;
+            }
+        }
+    </style>
+
+
+    <script>
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+
+     ////msg de MaxLength
+        $(document).on("input", ".maxlength", function () {         
+
+
+            if ($(this).val().length == parseInt($(this).attr("maxlength"))) {
+                alert("Excedeu o limite de " + $(this).attr("maxlength")+" caracteres" );
+            }
+
+        });
+
+
+
+        $(document).ready(function () {
+          
+
+            /* ao pressionar uma tecla em um campo que seja de class="pula" */
+            $('.tab').keypress(function (e) {
+
+                /*
+                 * verifica se o evento é Keycode (para IE e outros browsers)
+                 * se não for pega o evento Which (Firefox)
+                */
+                var tecla = (e.keyCode ? e.keyCode : e.which);
+
+                /* verifica se a tecla pressionada foi o ENTER */
+                if (tecla == 13) {
+                    /* guarda o seletor do campo que foi pressionado Enter */
+                    campo = $('.tab');
+                    /* pega o indice do elemento*/
+                    indice = campo.index(this);
+                    /*soma mais um ao indice e verifica se não é null
+                     *se não for é porque existe outro elemento
+                    */
+                    if (campo[indice + 1] != null) {
+                        /* adiciona mais 1 no valor do indice */
+                        proximo = campo[indice + 1];
+                        /* passa o foco para o proximo elemento */
+                        proximo.focus();
+                    }
+                    e.preventDefault(e);
+                }
+                /* impede o sumbit caso esteja dentro de um form */
+
+                return true;
+            })
+        })
+
+
+        $(document).ready(function () {           
+           
+
+            $("#id").on("keyup", function (event) {
+
+                if (event.which === 13) {
+                    Login();
+                }
+            });
+
+
+
+
+
+
+            $("#filterKey").on("keyup", function (event) {
+
+                if (event.which === 13) {
+                    var value = $(this).val().toLowerCase();
+                    $("#data tr").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                    $("#filterKey").select();
+                }
+            });
+
+            $('table').tablesorter();
+            $('#timeReg').tablesorter();
+            ///$("#loader").hide();
+            $("#items").hide();
+            $("#items").click(function () {
+                if (!$("#items").is(":visible")) {
+                    $("#items").show();
+                }
+                else {
+                    // $("#items").hide();
+                }
+            });
+        });
+        function Loader() {
+
+            $("#loader").show();
+
+        }
+        function ShowItems() {
+
+            $("#linkLogin").text("Sair");
+            /// $("#items").show();
+
+        }
+
+    </script>
+
+    <title> SRTP 2.0 ATEEI</title>
+</head>
+<body style="background-color: aquamarine;">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">SRTP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <a id="items">
+                <ul class="navbar-nav">
+
+
+                    <li class="nav-item active">
+                        <a class="nav-link" href="~/Home" onclick="Loader()">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/Orders/OrdersOn">Registro de Tempo<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/Orders/Routers" onclick="Loader()">Ordens<span class="sr-only">(current)</span></a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Controle de Qualidade
+                        </a>
+                        <!--modal -->
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="~/QualityControl/MaterialInspectByDoc?status=0" onclick="Loader()">Inspeção de Recebimento<span class="sr-only">(current)</span></a>
+                            <a class="dropdown-item" href="~/QualityControl/OnlineInspect">Inspeção de Rota<span class="sr-only">(current)</span></a>
+                            <a class="dropdown-item" href="~/QualityControl/ProductInspect">Inspeção final<span class="sr-only">(current)</span></a>
+                            <a class="dropdown-item" href="~/QualityControl/TestInspect">Teste de Produtos<span class="sr-only">(current)</span></a>
+
+
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/DashBoard/Reports" onclick="Loader()">Relatórios<span class="sr-only">(current)</span></a>
+                    </li>
+
+                </ul>
+
+        </div>
+
+
+        @if (@ViewBag.UserName == null)
+        {
+
+            <h4 id="linkLogin" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#ModalLogin">Entrar</h4>
+
+        }
+        else
+        {
+         <!-- <a href="~/Login/UserChats" ><img src="~/img/IconChat.png" class="icon20x20"/> </a> -->
+
+            <h4 id="linkLogin" style="color: black ; font-size: 15px; margin-top:5px;margin-left:5px;" onclick="Logout()"> <div style="background-image: url('../img/IconUser.png') " class="icon20x20"></div>@ViewBag.UserName</h4>
+
+        }
+
+        <!-- Modal -->
+        <div class="modal fade" id="ModalLogin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="margin-left:auto; margin-right:auto;">
+
+                        <!-- <form action="/EmpID/EmpID" method="post" style="text-align:center;"> -->
+                        <input class="form-control" type="text" id="id" name="id" placeholder="Seu ID..." />
+                        <button class="form-control" onclick="Login()">Entrar</button">
+
+                            <!-- </form> -->
+                    </div>
+                    <div class="modal-footer">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+    
+
+    <!-- <div class="loader" id="loader" style="margin-left:auto;margin-right:auto;margin-bottom:auto; margin-top:60px;"></div> -->
+    <!---teste dashboards-->
+
+
+    @RenderBody()
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

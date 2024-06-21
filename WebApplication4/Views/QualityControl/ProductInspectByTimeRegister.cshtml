@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "ProductInspect";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int line = 1;
+}
+
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+      
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;" class="form-control" id="title">Inspeção Final</h6>
+
+        <h6 id="loading" style="font-family:Calibri;text-align:center;" class="form-control loading" hidden></h6>
+
+
+
+
+
+
+
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+            <div class="input-group mb-3"><button class="form-control" onclick="ApproveAll(@ViewBag.timeRegisterId,'Y')">Aprovar Todos</button> <button class="form-control" onclick="ApproveAll(@ViewBag.timeRegisterId,'B')">Bloquear Todos</button></div>
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>N° de Série/Lote</th>
+                        <th>Cód. do Item</th>
+                        <th>Descrição</th>
+                        <th>Quantidade</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+
+                    @while (ViewBag.data.Read())
+                    {
+
+
+                        <tr ondblclick="ProductInspectLines(@ViewBag.data["ID"])">
+                            <td>@line</td>
+                            <td>@ViewBag.data["N_SERIE"]</td>
+
+                            <td>@ViewBag.data["ITEM"]</td>
+                            <td>@ViewBag.data["ItemName"]</td>
+                            <td>@ViewBag.data["QUANTIDADE"]</td>
+                            <td>
+                                <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Inspecionado por:" data-content="@ViewBag.data["FirstName"] @ViewBag.data["LastName"] às @ViewBag.data["DATA"]">
+                                    @if (@ViewBag.data["APROVADO"] == "Y")
+                                    {
+
+                                        <div style="background-image: url('../img/IconCheck.png');" class="icon20x20"></div>
+                                    }
+                                    @if (@ViewBag.data["APROVADO"] == "B")
+                                    {
+                                        <div style="background-image: url('../img/IconBlock.png');" class="icon20x20"></div>
+                                    }
+
+                                    @if (@ViewBag.data["APROVADO"] == "N")
+                                    {
+                                        <div style="background-image: url('../img/IconWait.png'); text-align:center;" class="icon20x20"></div>
+                                    }
+                                </a>
+                            </td>
+                          
+                        </tr>
+                        line++;
+                    }
+                    @{
+                        ViewBag.data.Close();
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </body>
+}
+
+

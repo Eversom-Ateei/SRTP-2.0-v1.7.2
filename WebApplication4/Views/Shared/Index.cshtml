@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+
+}
+
+    <div class="container mt-5 mb-3">
+        <div class="row">
+
+            @while (ViewBag.TopOrdensList.Read())
+            {
+                <div class="col-md-4">
+                    <div class="card p-3 mb-2">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <div class="icon"> <i class="bx bxl-mailchimp"></i> </div>
+                                <div class="ms-2 c-details">
+                                    <h6 class="mb-0">@ViewBag.TopOrdensList["ItemName"]</h6> <span>OP-@ViewBag.TopOrdensList["ORDEM"]</span>
+                                </div>
+                            </div>
+                            <div class="badge"> <span>@ViewBag.TopOrdensList["ItemCode"]</span> </div>
+                        </div>
+                        <div class="mt-5">
+
+                            @{
+
+                                decimal s = ((@Math.Round(@ViewBag.TopOrdensList["CmpltQty"], 2) * 100) / @Math.Round(@ViewBag.TopOrdensList["PlannedQty"], 2));
+
+                            }
+
+                            <h3 class="heading">@ViewBag.TopOrdensList["CardCode"]<br>@ViewBag.TopOrdensList["CardName"] </h3>
+                            <div class="mt-5">
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: @s.ToString().Replace(",",".")%" aria-valuenow="60" aria-valuemin="@Math.Round(@ViewBag.TopOrdensList["CmpltQty"],2)" aria-valuemax="@Math.Round(@ViewBag.TopOrdensList["PlannedQty"],2)"></div>
+                                </div>
+                                <div class="mt-3"> <span class="text1">@Math.Round(@ViewBag.TopOrdensList["CmpltQty"],2) Concluídos <span class="text2">de @Math.Round(@ViewBag.TopOrdensList["PlannedQty"],2) Unidades</span></span> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </div>

@@ -1,0 +1,53 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/WebApplication4",
+      "sslPort": 0
+    },
+    "iisExpress": {
+      "applicationUrl": "http://localhost:44388",
+      "sslPort": 44387
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
+      },
+      "ancmHostingModel": "OutOfProcess",
+      "nativeDebugging": false,
+      "use64Bit": false
+    },
+    "WebApplication4": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
+      },
+      "applicationUrl": "http://localhost:54888;http://localhost:5008"
+    },
+    "WSL": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\gabriel.castro\\Desktop\\SRTP 2.0 v1.2- editando\\WebApplication4\\bin\\x86\\Debug\\netcoreapp3.1\\WebApplication4_.exe",
+      "workingDirectory": "C:\\Users\\gabriel.castro\\Desktop\\SRTP 2.0 v1.2- editando\\WebApplication4\\",
+      "sqlDebugging": false,
+      "distributionName": "",
+      "nativeDebugging": false,
+      "jsWebView2Debugging": false
+    },
+    "ChatSignalR": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+    }
+  }
+}

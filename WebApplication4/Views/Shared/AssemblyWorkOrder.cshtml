@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Inspeção de Rotas";
+    Layout = "~/Views/Shared/Home.cshtml";
+    string change = "";
+
+
+
+
+
+}
+
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;font-size-adjust:inherit;">Inspeção Rotas</h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri; float:right">
+                <thead>
+                    <tr>
+                        <th>Nº do Itemo</th>
+                        <th>Descrição</th>
+                        <th>Posição</th>
+                        <th>Refêrencia de Mont.</th>
+                        <th>Quant.Base</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+
+                    @while (ViewBag.data.Read())
+                    {
+
+                        <tr ondblclick="AssemblyWorkOrderParameters(@ViewBag.data["ID"]);$('#@ViewBag.data["ID"]').show(); ">
+
+                            <td>@ViewBag.data["ItemCode"]</td>
+                            <td>@ViewBag.data["ItemName"]</td>
+                            <td>@ViewBag.data["PosId"]</td>
+                            <td>@ViewBag.data["AssemblyReference"]</td>
+                            <td>@ViewBag.data["BaseQty"]</td>
+
+
+                        </tr>
+
+                    <thead style="display:none;" id="@ViewBag.data["ID"]" name="data2" class="table-warning">
+
+                        <!--  PREENCHER  VIA JQUERY-->
+
+                    </thead>
+
+                }
+                    </tbody>
+                </table>
+                <div style="background-image: url('../img/IconAdd.png');" class="icon40x40" id="linkCloseTimeRegiste" style="color: black ; font-size: 15px;"></div>
+            </div>
+        </body>
+    }
+
+

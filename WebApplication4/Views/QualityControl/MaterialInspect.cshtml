@@ -1,0 +1,211 @@
+﻿
+@{
+    ViewBag.Title = "Inspeção de Materiais";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+
+@try
+{
+
+    if (ViewBag.userSession == "false")
+    {
+        <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+    }
+    else
+    {
+        <script>
+
+        
+           
+        </script>
+
+        <Body>
+            <h6 style="font-family:Calibri;text-align:center;" class="form-control">Inspeção de Materiais</h6>
+            <div class="container">
+                <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar..." />
+                <br />
+                <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                    <thead>
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Nome</th>
+
+                            <th scope="col">N° de Série/Lote </th>
+                            <th scope="col">Amostra___</th>
+                            <th scope="col">Quantidade_</th>
+                            <th scope="col">Comentários</th>
+                            <th scope="col">Vencimento</th>
+                            <th scope="col">NI______</th>
+                            <th scope="col">PAS_______</th>
+                            <th scope="col">Justificativa NI</th>
+                            <th scope="col" style="text-align:center;">Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="data">
+                        @foreach (MaterialInspect data in ViewBag.data)
+                        {
+                        <tr ondblclick="MaterialInspectLines(@data.Id)">
+                            <td>@data.ItemCode</td>
+                            <td>@data.ItemName</td>
+                            <td>@data.SerialNumber</td>
+                            <td><input type="number" name="sample" id="sample_@data.Id" class="form-control" value="@data.SampleQty.ToString().Replace(",",".")" disabled /></td>
+                            <td><input type="number" name="quantity" id="quantity_@data.Id" class="form-control" value="@data.Quantity.ToString().Replace(",",".")" disabled /></td>
+
+                            <td><input type="text" name="comments" id="comments_@data.Id" class="form-control" onblur="UpdateCommentsMaterialInspect(@data.Id)" value="@data.Comments" /></td>
+                            <td><input type="date" name="dueDate" id="dueDate_@data.Id" class="form-control" onblur="UpdateDueDateMaterialInspect('@data.ItemCode','@data.SerialNumber',@data.Id)" value="@data.ExpDate" /></td>
+
+                            <td>
+                                <select class="custom-select" id="NI_@data.Id" onchange="UpdateSampleMaterialInspect(@data.Id)" value="@data.Ni">
+
+                                    <option value="100">100%</option>
+                                    @if (data.Ni == "S1")
+                                    {
+                                    <option value="S1" selected>S1</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="S1">S1</option>
+                                    }
+                                    @if (data.Ni == "S2")
+                                    {
+                                    <option value="S2" selected>S2</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="S2">S2</option>
+                                    }
+                                    @if (data.Ni == "S3")
+                                    {
+                                    <option value="S3" selected>S3</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="S3">S3</option>
+                                    }
+                                    @if (data.Ni == "S4")
+                                    {
+                                    <option value="S4" selected>S4</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="S4">S4</option>
+                                    }
+                                    @if (data.Ni == "I")
+                                    {
+                                    <option value="I" selected>I</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="I">I</option>
+
+                                    }
+                                    @if (data.Ni == "II")
+                                    {
+                                    <option value="II" selected>II</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="II">II</option>
+
+                                    }
+                                    @if (data.Ni == "III")
+                                    {
+                                    <option value="III" selected>III</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="III">III</option>
+                                    }
+                                    @if (data.Ni == "")
+                                    {
+                                    <option value="" selected></option>
+
+                                    }
+
+                                </select>
+                            </td>
+
+                            <td>
+                                <select class="custom-select" id="PAS_@data.Id" onchange="UpdateSampleMaterialInspect(@data.Id)">
+                                    <option value="100">100%</option>
+
+                                    @if (data.Pas == "attenuated")
+                                    {
+                                    <option value="attenuated" selected>Atenuado</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="attenuated">Atenuado</option>
+                                    }
+                                    @if (data.Pas == "Normal")
+                                    {
+                                    <option value="Normal" selected>Normal</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="Normal">Normal</option>
+                                    }
+                                    @if (data.Pas == "Severe")
+                                    {
+                                    <option value="Severe" selected>Severo</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="Severe">Severo</option>
+                                    }
+                                    @if (data.Pas == "")
+                                    {
+                                    <option value="" selected></option>
+
+                                    }
+
+                                </select>
+
+                            </td>
+
+
+                            <td><input type="text" name="" id="justify_@data.Id" class="form-control" onchange="UpdateSampleMaterialInspect(@data.Id)" value="@data.Justify" /></td>
+
+
+
+                            <td>
+                                <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Inspecionado por:" data-content="@data.FirstName @data.LastName às @data.DateRelease">
+                                    @if (data.Status == "Y")
+                                    {
+
+                                        <div style="background-image: url('../img/IconCheck.png');" class="icon20x20"></div>
+                                    }
+                                    @if (data.Status == "B")
+                                    {
+                                        <div style="background-image: url('../img/IconBlock.png');" class="icon20x20"></div>
+                                    }
+
+                                    @if (data.Status == "N")
+                                    {
+                                        <div style="background-image: url('../img/IconWait.png'); text-align:center;" class="icon20x20"></div>
+                                    }
+                                </a>
+                            </td>
+
+
+
+
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </Body>
+    }
+}
+catch (Exception e)
+{
+
+    <h2>@e.Message</h2>
+
+
+}
+
+

@@ -1,0 +1,96 @@
+﻿
+@{
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+<html>
+<script>
+    $(document).ready(function () {
+
+        function getHostSite() {
+            //identificar inicio do path
+            //usada nas chamadas Ajax / jSON
+            var Path = location.host;
+            var VirtualDirectory;
+            if (Path.indexOf("localhost") >= 0 && Path.indexOf(":") >= 0) {
+                VirtualDirectory = "";
+            }
+            else {
+                var pathname = window.location.pathname;
+                var VirtualDir = pathname.split('/');
+                VirtualDirectory = VirtualDir[1];
+                VirtualDirectory = '/' + VirtualDirectory;
+            }
+            return location.protocol + "//" + location.host + VirtualDirectory + "/"
+        }
+
+        var connection = new signalR.HubConnectionBuilder().withUrl(getHostSite() + "chat").build();
+
+        $("#send").disabled = true;
+
+        var to = $("#to").val();
+
+        connection.on("ReceiveMessage" + to, function (user, message) {
+
+         /*   var audio = new Audio(getHostSite() + 'sons/AlarmNotify.mp3');
+            audio.addEventListener('canplaythrough', function () {
+                audio.play();
+
+            });*/
+            var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            var li = $("#messagesList").val() + (user + ": " + msg);
+
+            $("#messagesList").val(li);
+
+        });
+
+        connection.start().then(function () {
+
+            $("#send").disabled = false;
+
+        }).catch(function (err) {
+
+            return console.error(err.toString());
+
+        });
+
+        $("#send").on("click", function (event) {
+
+            var user = $("#from").val();
+            var message = $("#mensagem").val();
+            connection.invoke("SendMessage", user, message).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+    });
+</script>
+
+
+<body>
+
+    <div class="container col-6">
+        <!--<ul class="list-group" id="messagesList"></ul>-->
+        <input type="text" class="list-group" id="messagesList" />
+    </div>
+    <div class="container col-6">
+        <div class="form-group">
+            <label for="usuario">Usuário</label>
+            <input type="hidden" id="to" class="form-control" value="@ViewBag.to" />
+            <input type="hidden" id="from" class="form-control" value="@ViewBag.from" />
+        </div>
+        <div class="form-group">
+            <label for="mensagem">Mensagem</label>
+            <textarea class="form-control" id="mensagem" rows="2"></textarea>
+        </div>
+        <input type="button" class="btn btn-primary" id="send" value="Enviar" />
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr />
+        </div>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Inspeção de Rotas";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+     
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;font-size-adjust:inherit;" class="form-control" data-bs-toggle="tooltip" data-bs-html="true" title="sql: @ViewBag.query">Inspeção Rotas</h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th data-bs-toggle="tooltip" data-bs-html="true" title="ATEEI_SRTP_PRIMEIRA_INSPECAO.ORDEM">Ordem</th>
+                        <th data-bs-toggle="tooltip" data-bs-html="true" title="OITM.ItemCode">Cód. do Item</th>
+                        <th data-bs-toggle="tooltip" data-bs-html="true" title="OITM.ItemName">Descrição</th>                    
+                        <th data-bs-toggle="tooltip" data-bs-html="true" title="ATEEI_SRTP_PRIMEIRA_INSPECAO.Resource">Recurso</th>
+                        <th data-bs-toggle="tooltip" data-bs-html="true" title="ATEEI_SRTP_PRIMEIRA_INSPECAO.SEQUENCIA">Sequencia</th>
+                   
+                    </tr>
+                </thead>
+                <tbody id="data">
+
+                    @while (ViewBag.data.Read())
+                    {
+
+                    <tr ondblclick="ProductionSetup(@ViewBag.data["DocEntry"],'@ViewBag.data["Resource"]',@ViewBag.data["Sequence"])">
+                        <td>@ViewBag.data["DocEntry"] </td>
+                        <td>@ViewBag.data["ItemCode"]</td>
+                        <td>@ViewBag.data["ItemName"]</td>
+                        <td>@ViewBag.data["Resource"]</td>
+                        <td>@ViewBag.data["Sequence"]</td>
+
+                    </tr>
+                    }
+                    @{
+                        ViewBag.data.Close();
+                    }
+                </tbody>
+            </table>
+        </div>
+    </body>
+}
+
+

@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "Inspeção de Materiais";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+@try
+{
+    if (ViewBag.userSession == "false")
+    {
+        <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+    }
+    else
+    {
+        <script>
+
+            $(document).ready(function () {
+                /* ao pressionar uma tecla em um campo que seja de class="pula" */
+                $('#filter').click(function (e) {
+                    if ($('#filterItems').prop("hidden") == true)
+                    {
+                        $("#filterItems").prop("hidden", false);
+                    } else {
+                        $("#filterItems").prop("hidden", true);
+                    }
+                });
+                $('#CheckStatus').click(function (e) {
+
+                    $("#title").prop("hidden", true);
+                    $("#loading").click();
+
+                    ///$("#loading").prop("hidden", false);
+                   if ($('#CheckStatus').prop("checked") == true) {
+                        window.location.href = "../QualityControl/MaterialInspectByDoc?status=1";
+                        
+                    } else {
+
+                        window.location.href = "../QualityControl/MaterialInspectByDoc?status=0";
+
+                    }
+                });
+            });
+
+        </script>
+        <Body>
+
+            <h6 style="font-family:Calibri;text-align:center;" class="form-control" id="title">Inspeção de Materiais</h6>
+
+
+            <h4 id="loading" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#ModalTimeReg" hidden>load</h4>
+
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="ModalTimeReg">
+                <div class="modal-dialog modal-lg">                
+
+                     <div  style="margin-left:50%; margin-top:50%;">   <div id="loadingx" class="lds-roller " ><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> </div>
+                
+                </div>
+            </div>
+
+
+            <h6 id="loading1" style="font-family:Calibri;text-align:center;" class="form-control loading" hidden></h6>
+
+            <div class="container">
+                <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar..." />
+                <b>
+                    <label>Filtros:</label>
+                </b>
+                <div style="display: inline-block; ">
+                    <div id="filter" style="background-image: url('../img/IconDropDown.png');" class="icon15x10" ></div>
+                </div>
+                <div id="filterItems" hidden>
+
+                    @if (ViewBag.status == 0)
+                    {
+                        <input class="form-check-inline" id="CheckStatus" type="checkbox" />
+                    }
+                    else
+                    {
+                        <input class="form-check-inline" id="CheckStatus" type="checkbox" checked />
+                    }
+
+                    <b>  <label class="form-check-inline">Documentos Concluídos</label></b>
+                </div>
+
+                <br />
+                <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                    <thead>
+                        <tr>
+                            <th scope="col">Documento</th>
+                            <th scope="col">Nota fiscal </th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Data de Postagem</th>
+                            <th scope="col">Autor</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data">
+
+                        @foreach (ReceiptOfGoods receiptOfGood in ViewBag.data)
+                        {
+                            <tr ondblclick="MaterialInspect(@receiptOfGood.DocEntry)">
+                                <td>@receiptOfGood.DocEntry</td>
+                                <td>@receiptOfGood.Invoice</td>
+                                <td>@receiptOfGood.CardName</td>
+                                <td>@receiptOfGood.DocDate</td>
+                                <td>@receiptOfGood.FirstName</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </Body>
+    }
+
+
+}
+catch (Exception e)
+{
+
+    <h2>@e.Message</h2>
+
+}
+

@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Registro de Tempo";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;font-size-adjust:inherit;">Inspeção Rotas</h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th>Setup</th>
+                        <th>Ordem</th>
+                        <th>Começou em:</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+            </table>
+        </div>
+
+
+        <h4 id="linkLogin" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#ModalTimeReg">Entrar</h4>
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="ModalTimeReg" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <!-- <form action="/EmpID/EmpID" method="post" style="text-align:center;"> -->
+                        <input type="text" id="id" name="id" placeholder="Seu ID..." />
+                        <button class="btn btn-secondary" onclick="Login()">
+                            Entrar</button">
+
+                            <!-- </form> -->
+                    </div>
+                    <div class="modal-footer">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </body>
+}
+
+

@@ -1,0 +1,48 @@
+
+@{
+    ViewData["Title"] = "ProductTest";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int count = 1;
+}
+
+
+
+<html>
+  <head>
+    <title>Instascan</title>
+        <script type="text/javascript" src="~/js/instascan.min.js" ></script>
+  </head>
+  <body>
+<h1>ola</h1>
+    <video id="preview"></video>
+       <video id="video"></video>
+    <script>
+        const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        $(document).ready(function () {
+        
+        alert("teste");
+        let scanner = new Instascan.Scanner(
+            {        
+                video: document.getElementById('preview')
+            }
+        );
+        scanner.addListener('scan', function(content) {
+            alert('Escaneou o conteudo: ' + content);
+            window.open(content, "_blank");
+        });
+        Instascan.Camera.getCameras().then(cameras => 
+        {
+         alert("teste");
+            if(cameras.length > 0){
+       
+                scanner.start(cameras[0]);
+   alert("Não existe câmera no dispositivo!");
+            } else {
+                alert("Não existe câmera no dispositivo!");
+            }
+        });
+        });
+    </script>
+      <input type="file" accept="image/*" capture="camera" />
+ </body>
+</html>

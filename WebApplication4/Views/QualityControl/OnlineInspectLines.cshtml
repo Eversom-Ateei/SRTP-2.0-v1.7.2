@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Inspeção de Rotas";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+    
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;font-size-adjust:inherit;" class="form-control" >Inspeção Rotas</h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th>Parâmetro</th>
+                        <th>Descrição</th>
+                        <th>Observação</th>
+                        <th>Status</th>
+                        <th>comentário</th>
+                        <th>Bloqueado por</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+
+                    @while (ViewBag.data.Read())
+                    {
+                        <tr ondblclick="alert(@ViewBag.data["ID"])">
+
+                            <td>@ViewBag.data["COD_PARAMETRO"]</td>
+                            <td>@ViewBag.data["PARAMETRO"]</td>
+                            <td>@ViewBag.data["VALOR"]</td>
+                            <td>@ViewBag.data["APROVADO"]</td>
+                            <td>@ViewBag.data["OBS"]</td>
+                            <td>@ViewBag.data["MOTIVO_STATUS"]</td>
+
+                        </tr>
+                    }
+                    @ViewBag.data.Close();
+
+                </tbody>
+            </table>
+        </div>
+    </body>
+}
+
+

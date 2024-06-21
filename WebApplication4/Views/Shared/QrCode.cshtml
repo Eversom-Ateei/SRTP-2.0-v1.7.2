@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "ProductTest";
+    Layout =null;
+    int count = 1;
+}
+
+<head>
+    <script type="text/javascript" src="~/js/qrcode.js"></script>
+</head>
+<body onload="createQrCode(@ViewBag.w,@ViewBag.h, '@ViewBag.text', '@ViewBag.level')">
+    <div id="qrcode">
+
+    </div>
+</body>
+<script>
+    function createQrCode(w, h, text, level) {
+
+        level = level.toUpperCase();
+        var CorrLevel;
+        if (level == 'L')
+        {
+            CorrLevel = QRCode.CorrectLevel.L;
+        }
+        if (level == 'M') {
+            CorrLevel =  QRCode.CorrectLevel.M
+        }
+        if (level == 'Q') {
+            CorrLevel =  QRCode.CorrectLevel.Q
+        }
+        if (level == 'H') {
+            CorrLevel =  QRCode.CorrectLevel.H
+        }
+
+
+        var qrcode = new QRCode("qrcode", {
+            text: text,
+            width: w,
+            height: h,
+            colorDark: "black",
+            colorLight: "white",
+            correctLevel: CorrLevel
+        });
+    }
+    ///QRCode.CorrectLevel ---L,M,Q,H</script>
+

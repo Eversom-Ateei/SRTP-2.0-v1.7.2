@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Selecão de Serial e Lotes";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int count = 0;
+}
+@try
+{
+    if (ViewBag.userSession == "false")
+    {
+        <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+    }
+    else
+    {
+        <script>
+          
+        </script>
+
+        <Body>
+
+            <h6 style="font-family:Calibri;text-align:center;">Registro de Tempo</h6>
+            <div class="container">
+                <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar..." />
+                <br />
+                <div>
+                    <h4>@ViewBag.itemCode - @ViewBag.itemName</h4>
+
+                    <button onclick="SaveTableProductTraceSerialBatch()" id="save" type="button" class="btn btn-secondary btn-sm" style="float: left; margin-left: 94% ; margin-bottom : 1%" ; disabled>Salvar</button>
+                
+                </div>
+                <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                    <thead>
+                        <tr>
+                            <th scope="col">Lote</th>
+                            <th scope="col">Quantidade</th>
+                            <th scope="col">UM</th>
+                            <th scope="col">Itens Por UM</th>
+                            <th scope="col">--</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="data">
+                        <input type="hidden" id="pos" value="@ViewBag.posId" />
+                        <input type="hidden" id="user" value="@ViewBag.userSession" />
+                        <input type="hidden" id="baseQty" value="@ViewBag.baseQty" />
+                        <input type="hidden" id="prodTraceSerBatchId_@count" value="0" />
+                        <tr>
+                            <td>
+                                <select class="form-control" id="BatchNum_0" onchange="StatusButton('save', 'Salvar')">
+                                    <option value="" selected>...</option>
+                                    @foreach (SerialBatchNum stringbatch in @ViewBag.optionsbatch)
+                                    {
+                                        <option value="@stringbatch.BatchNum">@stringbatch.BatchNum - @stringbatch.Quantity @stringbatch.UomName</option>
+                                    }
+                                </select>
+                            </td>
+
+                            <td><input type="number" id="Quantity_0" class="form-control" onchange="StatusButton('save', 'Salvar')" onkeyup="StatusButton('save', 'Salvar')" /></td>
+                            <td><input type="text" id="UoM_0" class="form-control" onchange="StatusButton('save', 'Salvar')" onkeyup="StatusButton('save', 'Salvar')" /></td>
+                            <td><input type="number" id="QtByUnit_0" class="form-control" onchange="StatusButton('save', 'Salvar')" onkeyup="StatusButton('save', 'Salvar')" /></td>
+                            <td><div> </div></td>
+
+                            <td><input type="hidden" id="ProductTraceId" value="@ViewBag.ProductTraceId" /></td>
+
+                            <td><input type="hidden" id="ItemCode" value="@ViewBag.itemCode" /></td>
+                        </tr>
+                        @{count = @count + 1;}
+                        @while (ViewBag.data.Read())
+                        {
+                            <tr>
+                                <td>
+                                    <select class="form-control" id="BatchNum_@count">
+                                        <option selected>@ViewBag.data["BatchNum"]</option>
+                                        @foreach (SerialBatchNum stringbatch in @ViewBag.optionsbatch)
+                                        {
+                                            <option value="@stringbatch.BatchNum">@stringbatch.BatchNum - @stringbatch.Quantity @stringbatch.UomName</option>
+                                        }
+                                    </select>
+                                </td>
+
+                                <td><input type="text" id="Quantity_@count" class="form-control" onchange="StatusButton('save', 'Salvar')" onkeyup="StatusButton('save', 'Salvar')" value="@ViewBag.data["Quantity"]" /></td>
+                                <td><input type="text" id="UoM0_@count" class="form-control" onchange="StatusButton('save', 'Salvar')" onkeyup="StatusButton('save', 'Salvar')" /></td>
+                                <td><input type="number" id="QtByUnit0_@count" class="form-control" onchange="StatusButton('save', 'Salvar')" onkeyup="StatusButton('save', 'Salvar')" /></td>
+                                <td><a href="" class="nav-link" onclick="DeleteSerialBatch(@ViewBag.data["ID"])">Excluir</a></td>
+
+                            </tr>
+
+                            <input type="hidden" id="prodTraceSerBatchId_@count" value="@ViewBag.data["ID"]">
+
+                            count++;
+                        }
+
+                        <input type="hidden" id="count" value="@count" />
+
+                    </tbody>
+                </table>
+            </div>
+        </Body>
+    }
+}
+catch (Exception e)
+{
+
+    <h2>@e.Message</h2>
+
+
+}

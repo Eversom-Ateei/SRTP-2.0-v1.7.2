@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Rotas";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int c = 0;
+}
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+     
+    </script>
+
+    <Body onload="RoutersView()">
+               
+
+
+
+        <h6 style="font-family:Calibri;text-align:center;" class="form-control">Rotas de Produção</h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br>
+            <table class="table table-sm table-hover tablesorter" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Ordem</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Recurso</th>
+                        <th scope="col">Apontados</th>
+                        <th scope="col">Planejado</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+            </table>
+
+            <h4 id="linkTimeReg" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#ModalTimeReg" hidden>time</h4>
+
+
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="ModalTimeReg">
+                <div class="modal-dialog modal-lg">
+                  
+                    <div class="modal-content">
+
+                        <table id="timeReg" class="table table-bordered tablesorter" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                            <!--Load by jquery-->
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade bg-dark" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="ModalSerial">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <table id="serials" class="table table-bordered" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                            <!--Load by jquery-->
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </Body>
+}
+
+

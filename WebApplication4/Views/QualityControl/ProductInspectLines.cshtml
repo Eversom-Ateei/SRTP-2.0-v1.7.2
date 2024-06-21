@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewBag.Title = "Setup de Produção";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int i = 0;
+}
+
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+    
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;font-size-adjust:inherit;" class="form-control">Inspeção Rotas</h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+
+            <h5 style="float:left;">@ViewBag.itemCode - @ViewBag.itemName - @ViewBag.serial</h5>
+
+            <br>
+
+            <button onclick="SaveTableProductInspectLines()" id="save" type="button" class="btn btn-secondary btn-sm" style="float: left; margin-left: 94% ; margin-bottom : 1%" ; disabled>Salvar</button>
+            <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                <thead>
+                    <tr>
+                        <th>Parâmetro</th>
+                        <th>Descrição</th>
+                        <th>Observação</th>
+                        <th>Qtd.Bloqueada</th>
+                        <th>Status</th>
+                        <th>comentário</th>
+                        <th>Bloqueado por</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+                    @while (ViewBag.data.Read())
+                    {
+
+                        <tr ondblclick="alert(@ViewBag.data["ID"])" class="font-weight-bold">
+                            <td>@ViewBag.data["COD_PARAMETRO"]</td>
+                            <td>@ViewBag.data["PARAMETRO"]</td>
+                            <td>@ViewBag.data["VALOR"]</td>
+                            <td>
+                                @if (@ViewBag.data["QUANTIDADE_BLOQUEADA"] < 1)
+                                {
+                                    <input type="number" id="blockQty_@i" value="0" class="form-control" onkeyup="StatusButton('save', 'Salvar')" />
+
+                                }
+                                else
+                                {
+                                    <input type="number" id="blockQty_@i" value="@ViewBag.data["QUANTIDADE_BLOQUEADA"].ToString().Replace(",", ".")" class="form-control" onkeyup="StatusButton('save', 'Salvar')" />
+
+                                }
+                            </td>
+                            <td>
+                                <select class="custom-select" id="status_@i" onblur=" ChangeforStatusMaterialInspectLines(@i)" onchange="StatusButton('save', 'Salvar')">
+                                    @if (@ViewBag.data["APROVADO"] == "Y")
+                                    {
+                                        <option value="Y" selected>Aprovado</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Y">Aprovado</option>
+                                    }
+
+                                    @if (@ViewBag.data["APROVADO"] == "B")
+                                    {
+                                        <option value="B" selected>Bloqueado</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="B">Bloqueado</option>
+                                    }
+
+                                    @if (@ViewBag.data["APROVADO"] == "N")
+                                    {
+                                        <option value="N" selected>...</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="N">...</option>
+                                    }
+
+                                </select>
+                            </td>
+                            <td><input type="text" id="comments_@i" value="@ViewBag.data["OBS"]" class="form-control" onkeyup="StatusButton('save', 'Salvar')" /> </td>
+                            <td>
+                                <select class="custom-select" id="reason_@i" onchange="StatusButton('save', 'Salvar')">
+
+                                    @if (@ViewBag.data["MOTIVO_STATUS"] == null)
+                                    {
+                                        <option selected value="...">...</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@ViewBag.data["MOTIVO_STATUS"]" selected>@ViewBag.data["MOTIVO_STATUS"]</option>
+                                    }
+                                    @foreach (BlockReason reason in ViewBag.Reason)
+                                    {
+                                        <option value="@reason.Reason">@reason.Reason</option>
+
+                                    }
+                                </select>
+                            </td>
+
+
+                            <td>
+                                <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Inspecionado por:" data-content="@ViewBag.data["FirstName"] @ViewBag.data["LastName"] às @ViewBag.data["DATA"] ">
+                                    @if (@ViewBag.data["APROVADO"] == "Y")
+                                    {
+                                        <div style="background-image: url('../img/IconCheck.png');" class="icon20x20"></div>
+                                    }
+                                    @if (@ViewBag.data["APROVADO"] == "B")
+                                    {
+                                        <div style="background-image: url('../img/IconBlock.png');" class="icon20x20"></div>
+                                    }
+                                    @if (@ViewBag.data["APROVADO"] == "N")
+                                    {
+                                        <div style="background-image: url('../img/IconWait.png'); text-align:center;" class="icon20x20"></div>
+                                    }
+                                </a>
+                            </td>
+
+
+
+                        </tr>
+
+
+                        <input type="hidden" id="productInspectLinesId_@i" value="@ViewBag.data["ID"]" />
+                        <input type="hidden" id="productInspectId_@i" value="@ViewBag.data["ID_PLACAS_INSPECIONADAS"]" />
+
+                        i++;
+
+                    }
+
+                    @{
+                        ViewBag.data.Close();
+                    }
+                    <input type="hidden" id="count" value="@i" />
+                </tbody>
+            </table>
+        </div>
+    </body>
+}
+
+

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\inetpub\MeuSite7</_PublishTargetUrl>
+    <History>True|2024-03-04T16:33:58.9088907Z;True|2024-03-04T12:02:05.3794087-03:00;True|2024-03-04T11:55:56.3237810-03:00;False|2024-03-04T11:55:33.0702221-03:00;False|2024-03-04T11:54:43.8797958-03:00;False|2024-03-04T11:54:34.6360266-03:00;True|2024-03-04T11:52:49.5993093-03:00;False|2024-03-04T11:52:25.8382778-03:00;True|2024-03-04T11:49:15.4433225-03:00;True|2024-03-04T11:38:54.6789065-03:00;True|2024-03-04T11:30:41.1663528-03:00;True|2024-03-04T11:23:53.4535739-03:00;True|2024-03-04T10:51:05.1306153-03:00;False|2024-03-04T10:50:14.5536379-03:00;True|2024-01-26T14:51:28.3669769-03:00;False|2024-01-26T14:48:42.2548135-03:00;True|2024-01-26T14:18:56.8229971-03:00;True|2024-01-26T14:08:57.9058966-03:00;</History>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+</Project>

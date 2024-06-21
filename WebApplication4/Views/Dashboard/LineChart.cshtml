@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "LineChart";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+
+<canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="963" height="406" style="display: block; height: 325px; width: 771px;"></canvas>
+
+<!-- Graphs -->
+
+<script>
+        ///adiciona mais coluna na tabela
+
+        var columns = ["ddd", "ddd", "ddd"];
+        var values = [15339, 21345, 18483, 777770000];
+
+
+        ///fazer looping pra adicionar mais item e valores na tabela.......... com function ajax retornar um vetor contendo os valores de tabela e de valores
+        values.push("9999999999");
+        columns.push("fff");
+
+
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+
+                labels: columns,
+
+                datasets: [{
+                    data: values,
+                    lineTension: 0,
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false,
+                }
+            }
+        });
+</script>

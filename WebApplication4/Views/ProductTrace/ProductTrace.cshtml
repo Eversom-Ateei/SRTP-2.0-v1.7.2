@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewBag.Title = "Rastreabilidade";
+    Layout = "~/Views/Shared/Home.cshtml";
+}
+@try
+{
+    if (ViewBag.userSession == "false")
+    {
+        <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+    }
+    else
+    {
+<script>
+             $(document).ready(function () {
+  $("#code").keyup(function (event) {
+
+            if (event.which === 13)
+            {
+
+                LoadDetail(@ViewBag.docEntry, '@ViewBag.serial');
+
+            }
+        });
+
+        $("#quantity").keyup(function (event) {
+
+            if (event.which === 13)
+            {
+
+                ScanTraceWO(@ViewBag.docEntry, '@ViewBag.serial');
+
+            }
+        });
+
+    });
+
+</script>
+
+        <Body>
+
+            <h6 style="font-family:Calibri;text-align:center;">Rastreabilidade de Lotes</h6>
+            <div class="container">
+                <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar..." />
+
+                <br />
+                <div class="input-group mb-3">
+
+                    <!-- <button onclick="AutoTraceBySerial(@ViewBag.docEntry,'@ViewBag.serial')">auto</button>-->
+
+                    <input type="hidden" id="serial" value="@ViewBag.serial">
+                    <input class="form-control" id="code" type="text" placeholder="Código" width="10px" />
+                    <input class="form-control" id="itemCode" type="text" placeholder="Cód do Item..." width="10px" />
+                    <input class="form-control" id="position" type="text" placeholder="Posição" width="10px" />
+                    <input class="form-control" id="batchNum" type="text" placeholder="Lote ou série..." />
+                    <input class="form-control" id="quantity" type="text" placeholder="Quantidade" width="10px" />
+
+
+
+                </div>
+
+
+                <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Posição</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data">
+                        @{int count = 0; int n = 1;}
+
+                        @while (ViewBag.data.Read())
+                        {
+                          
+                            <tr>
+                                <td class="font-weight-bold">@n</td>
+                                <td><label class="form-control"> @ViewBag.data["PosId"]</label></td>
+                                <td>
+                                    <select class="form-control" id="itemCode_@count" onchange="ChangeItemProdTrace(@ViewBag.data["ID"],'itemCode_@count')">
+                                        <option selected>@ViewBag.data["ItemCode"]</option>
+
+                                        @foreach (ItemMasterData m in @ViewBag.optionItems)
+                                        {
+                                            if (@m.PosId == @ViewBag.data["PosId"].ToString())
+                                            {
+                                                <option value="@m.ItemCode">@m.ItemCode </option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                                <td><label class="form-control">@ViewBag.data["ItemName"]</label></td>
+                                <td><label class="form-control">@ViewBag.data["Quantity"]</label></td>
+                                <td><div style="margin-top:10px "></div><div style="background-image: url('../img/IconDecider.png');" class="icon20x20" style="color: black ; font-size: 15px; margin-top: 40%; " onclick="ProductTraceSerialBatch(@ViewBag.data["Id"],@ViewBag.data["DocEntry"],'@ViewBag.data["ItemCode"]',@ViewBag.data["PosId"],@ViewBag.data["Quantity"])"></div></td>
+                            </tr>
+                            count++;
+                            n++;
+                        }
+
+
+                    </tbody>
+                </table>
+                <div style="background-image: url('../img/IconAdd.png');" class="icon40x40" id="linkCloseTimeRegiste" style="color: black ; font-size: 15px;"></div>
+            </div>
+        </Body>
+        
+    }
+}
+catch (Exception e)
+{
+
+    <h2>@e.Message</h2>
+
+
+}

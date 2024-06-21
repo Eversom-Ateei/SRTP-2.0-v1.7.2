@@ -1,0 +1,5 @@
+﻿Configurar o Pool do Site pra rodar o SDK do SAP.Utilizar identidade do administrador do windows
+Configurar o WebConfig.xml caso não funcione de "modulev2" para "module"
+configurar o pool pra rodar app 32bits
+configurar no WebConfig o "WebApplication4.exe" aqui na tag  <aspNetCore processPath="WebApplication4.exe" ....
+Instalar o netcore no IIS a pasta está anexada a este projeto PASTA "NETCORE INSTALL".

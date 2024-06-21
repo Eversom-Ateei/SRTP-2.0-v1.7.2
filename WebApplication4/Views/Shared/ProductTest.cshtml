@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewData["Title"] = "ProductTest";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int count = 1;
+}
+
+
+
+@if (ViewBag.userSession == "false")
+{
+    <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+}
+else
+{
+    <script>
+    </script>
+
+    <body>
+        <h6 style="font-family:Calibri;text-align:center;" class="form-control">Plano de Testes do Item @ViewBag.itemCode de Serial: @ViewBag.serial </h6>
+        <div class="container">
+            <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar...">
+            <br />
+            <div>
+                <a tabindex="0" data-toggle="modal" data-trigger="focus" title="Informações:" data-content="Descrição:" data-target="#ModalItens">
+                    <div style="background-image: url('../img/IconInfo.png'); width: 20px; height:20px; float:right;  " class="icon20x20X"></div>
+
+
+                </a>
+
+                <h5 style="float:left;">@ViewBag.itemCode - @ViewBag.itemName SERIAL: @ViewBag.serial</h5>
+
+                <button onclick="SaveTableProductTestLines()" id="save" type="button" class="btn btn-secondary btn-sm" style="float: left; margin-left: 94% ; margin-bottom : 1%" ; disabled>Salvar</button>
+
+                <table class="table table-sm table-hover" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                    <thead>
+
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">N° da Amostra</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Descrição </th>
+                            <th scope="col">Mínimo </th>
+                            <th scope="col">Máximo</th>
+                            <th scope="col">Meta</th>
+                            <th scope="col">Medição</th>
+                            <th scope="col">Comentários</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Motivo</th>
+                            <th scope="col">Ferramenta</th>
+                        </tr>
+
+                    </thead>
+                    <tbody id="data">
+                        @while (ViewBag.data.Read())
+                        {
+
+                            <tr>
+                                <td class="font-weight-bold" style="color:grey;">@count</td>
+                                <td class="font-weight-bold">@ViewBag.data["SampleNumber"]</td>
+                                <td class="font-weight-bold">@ViewBag.data["ParamCode"]</td>
+                                <td class="font-weight-bold">@ViewBag.data["Description"]</td>
+                                <td class="font-weight-bold"> <input type="text" id="minimun_@count" class="form-control" value="@ViewBag.data["Minimun"]" onchange="StatusButton('save', 'Salvar')" /></td>
+                                <td class="font-weight-bold"> <input type="text" id="maximun_@count" class="form-control" value="@ViewBag.data["Maximun"]" onchange="StatusButton('save', 'Salvar')" /> </td>
+                                <td class="font-weight-bold"> <input type="text" id="mark_@count" class="form-control" value="@ViewBag.data["Mark"]" onchange="StatusButton('save', 'Salvar')" /></td>
+                                <td><input type="text" id="measurement_@count" class="form-control" value="@ViewBag.data["Measurement"]" onchange="StatusButton('save', 'Salvar')" /></td>
+
+                                <td class="font-weight-bold"> <input type="text" class="form-control" id="comments_@count" value="@ViewBag.data["Comments"]" onchange="StatusButton('save', 'Salvar')" /></td>
+
+                                <td>
+
+                                    <select class="custom-select" id="status_@count" onblur=" ChangeforStatusMaterialInspectLines(@count)" onchange="StatusButton('save', 'Salvar')">
+
+                                        @if (@ViewBag.data["Status"] == "Y")
+                                        {
+                                            <option value="Y" selected>Aprovado</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Y">Aprovado</option>
+                                        }
+                                        @if (@ViewBag.data["Status"] == "B")
+                                        {
+                                            <option value="B" selected>Bloqueado</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="B">Bloqueado</option>
+                                        }
+
+                                        @if (@ViewBag.data["Status"] == "N")
+                                        {
+                                            <option value="N" selected>...</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="N">...</option>
+                                        }
+
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="custom-select" id="justify_@count" onchange="StatusButton('save', 'Salvar')">
+                                        {
+                                        @if (ViewBag.data["Justify"].ToString() == null)
+                                        {
+                                            <option selected value="...">...</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@ViewBag.data["Justify"].ToString()" selected>@ViewBag.data["Justify"].ToString()</option>
+                                        }
+                                        @foreach (BlockReason reason in ViewBag.Reason)
+                                        {
+                                            <option value="@reason.Reason">@reason.Reason</option>
+                                        }
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <select class="custom-select tab" id="toolCod_@count" onchange="StatusButton('save', 'Salvar')">
+
+                                        @if (ViewBag.data["ToolCod"].ToString() != "")
+                                        {
+                                            <option value=""></option>
+                                            <option value="@ViewBag.data["ToolCod"]" selected>@ViewBag.data["ToolCod"]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="" selected></option>
+                                        }
+
+                                        @foreach (ProductionTool tools in ViewBag.Tools)
+                                        {
+                                            <option value="@tools.ToolCod">@tools.ToolCod</option>
+
+                                        }
+
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Inspecionado por:" data-content="@ViewBag.data["FirstName"] às @ViewBag.data["DateRealese"]">
+                                        @if (@ViewBag.data["Status"] == "Y")
+                                        {
+
+                                            <div style="background-image: url('../img/IconCheck.png');" class="icon20x20"></div>
+                                        }
+                                        @if (@ViewBag.data["Status"] == "B")
+                                        {
+                                            <div style="background-image: url('../img/IconBlock.png');" class="icon20x20"></div>
+                                        }
+
+                                        @if (@ViewBag.data["Status"] == "N")
+                                        {
+                                            <div style="background-image: url('../img/IconWait.png'); text-align:center;" class="icon20x20"></div>
+                                        }
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                            <input type="hidden" id="statusOld_@count" value="@ViewBag.data["Status"]" />
+                            <input type="hidden" id="productTestLinesId_@count" value="@ViewBag.data["ID"]" />
+                            <input type="hidden" id="productTestId_@count" value="@ViewBag.data["ProductTestId"]" />
+                            <input type="hidden" id="quantity_@count" value="@ViewBag.data["Quantity"]" />
+                            <input type="hidden" id="count" value="@count" />
+
+
+
+                            count++;
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="modal fade" id="ModalItens" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Informações</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <h7><b>Código:</b>@ViewBag.itemCode</h7><br>
+                            <h7><b>Nome:</b>@ViewBag.itemName</h7><br>
+                           
+
+
+                        </div>
+
+                        <div class="modal-footer">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+</body>
+}
+
+
+
+

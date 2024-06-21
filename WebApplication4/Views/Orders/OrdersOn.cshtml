@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "Inspeção de Materiais";
+    Layout = "~/Views/Shared/Home.cshtml";
+    int count = 1;
+}
+@try
+{
+    if (ViewBag.userSession == "false")
+    {
+        <div style="background-image: url('../img/IconDisconected.png');" class="icon200x200"></div>
+    }
+    else
+    {
+        <script>
+
+
+          
+        </script>
+
+        <Body>
+
+            <h6 style="font-family:Calibri;text-align:center;" class="form-control">Registro de Tempo</h6>
+            <div class="container">
+                <input class="form-control" id="filterKey" type="text" placeholder="Pesquisar..." />
+                <br />
+               
+
+                    <table class="table table-sm table-hover tablesorter" style="background-color:rgb(255, 255, 255); font-family:Calibri">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>N° do RT</th>
+                                <th scope="col">Ordem</th>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Recurso</th>
+                                <th scope="col">Sequência</th>
+                                <th scope="col">Começou em:</th>
+                                <th scope="col">Pendências</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data">
+
+
+                            @while (ViewBag.data.Read())
+                            {
+
+                            <tr>
+                                <td class="font-weight-bold">@count</td>
+                                <td class="font-weight-bold">@ViewBag.data["ID"]</td>
+                                <td class="font-weight-bold">@ViewBag.data["ORDEM"]</td>
+                                <td class="font-weight-bold">@ViewBag.data["CardName"]</td>
+                                <td class="font-weight-bold">@ViewBag.data["RECURSO"]</td>
+                                <td class="font-weight-bold">@ViewBag.data["SEQUENCIA"]</td>
+                                <td class="font-weight-bold">@ViewBag.data["INICIO"]</td>
+
+                                <td>
+                                    <div style="display: inline-block;">
+                                        <div style="background-image: url('../img/ScanSerial.png');" class="icon20x20" id="linkCloseTimeRegiste" style="color: black ; font-size: 15px; " onclick="ScannerSerialOnRout(@ViewBag.data["ORDEM"],@ViewBag.data["SEQUENCIA"],@ViewBag.data["PosId"],@ViewBag.data["ID_RG_SETUP"],@ViewBag.data["ID"],'@ViewBag.data["RECURSO"]',@ViewBag.data["USUARIO"])"></div>
+
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div style="background-image: url('../img/IconPower.png');" class="icon20x20" id="linkCloseTimeRegiste" style="color: black ; font-size: 15px; " data-toggle="modal" data-target="#id_@ViewBag.data["ID"]"></div>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="id_@ViewBag.data["ID"]" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Fechar Registro de Tempo?</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div style="text-align:center;">
+                                                        <input type="number" id="quantity_@ViewBag.data["ID"]" name="quantity_@ViewBag.data["ID"]" placeholder="Quantidade..." />
+                                                        <input type="button" onclick="VerifyCloseTimeRegister(@ViewBag.data["ID"]) " class="btn btn-secondary" value="Finalizar" />
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer"> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            count++;
+                            }
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+        </Body>
+        count++;
+    }
+}
+catch (Exception e)
+{
+
+    <h2>@e.Message</h2>
+
+
+}
+
+

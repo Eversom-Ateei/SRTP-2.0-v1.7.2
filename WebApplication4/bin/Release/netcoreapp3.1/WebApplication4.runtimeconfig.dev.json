@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Eversom.Fragozo\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Eversom.Fragozo\\.nuget\\packages"
+    ]
+  }
+}
