@@ -587,11 +587,13 @@ namespace WebApplication4.Controllers
                 {
                     string return_ = "";
                     datax.Close();
-                    string query_WO = "SELECT * FROM WOR1 WHERE DocEntry = " + docEntry + " and ItemCode = '" + itemCode + "'";
+                    //string query_WO = "SELECT * FROM WOR1 WHERE DocEntry = " + docEntry + " and ItemCode = '" + itemCode + "'";
+                    string query_WO = "SELECT * FROM ITT1 WHERE Father = (SELECT ItemCode FROM OWOR WHERE DocNum = " + docEntry +  ") AND Code = '" + itemCode + "'" ;
                     System.Data.Common.DbDataReader data_WO = con.Connect(query_WO);
                     while (data_WO.Read())
                     {
-                        if (Convert.ToSingle(data_WO["BaseQty"]) > Qty_02)
+                        //if (Convert.ToSingle(data_WO["BaseQty"]) > Qty_02)
+                        if (double.Parse(data_WO["Quantity"].ToString()) > Qty_02)
                         {
 
                             if (!serial_aponted)
@@ -1417,12 +1419,12 @@ namespace WebApplication4.Controllers
                     ////exigir o serial na ultima rota 0 sim 1 não
                     if (QtyOk == "1")
                     {
-                        if (VerifySerialOnLastRout(docEntry, serial, sequence) || (sequence - 1 == 1))
+                        if (VerifySerialOnLastRout(docEntry, serial, sequence) || (sequence - 1 == 1) || VerifyLastRout(docEntry) == "1")
                         {
                             if ((!VerifyIsExistOnRout(docEntry, serial, sequence)) || (VerifyBatchQuantity(docEntry, serial, sequence, quantity)))
                             {
 
-                                if (VerifyBatchQuantity(docEntry, serial, sequence, quantity) || (sequence - 1 == 1)/*VerifyLastRout(docEntry, sequence) == "1"*/)
+                                if (VerifyBatchQuantity(docEntry, serial, sequence, quantity) || (sequence - 1 == 1) || VerifyLastRout(docEntry) == "1")
                                 {
                                     conn.SqlNonQuery(" insert into ATEEI_SRTP_RG_N_SERIE_RECURSO(ORDEM,N_SERIE,USUARIO,RECURSO,DATA,SEQUENCIA,ID_RG_TEMPO,PosId,ID_RG_SETUP,Quantity) values (" + docEntry + ",'" + serial + "'," + user + ",'" + resource + "',getdate()," + sequence + "," + timeRegisterId + "," + posId + "," + idRgSetup + "," + quantity.ToString().Replace(",", ".") + ") ");
 
@@ -1520,7 +1522,7 @@ namespace WebApplication4.Controllers
                 while (QtyOnRoat.Read())
                 {
                     qtyOnRout = double.Parse(QtyOnRoat["QUANTIDADE"].ToString());
-                }
+                }QtyOnRoat.Close();
 
                 ret = qtyOnLastRout >= (qty + qtyOnRout) ? "1" : "0";
             }
@@ -1531,9 +1533,9 @@ namespace WebApplication4.Controllers
             return ret;
         }
 
-        public string VerifyLastRout(int docEntry, int rout)
+        public string VerifyLastRout(int docEntry)
         {
-            string ret = "0";
+            string ret;
             int lastRout = 0;
            
             try
@@ -1546,10 +1548,7 @@ namespace WebApplication4.Controllers
                     lastRout = int.Parse(LastRout["SEQUENCIA"].ToString());
 
                 } LastRout.Close();
-                 if (lastRout == 1)
-                {
-                    ret = "1";
-                }
+                ret = lastRout == 1 ? "1" : "0";
             }
             catch (Exception e)
             {
