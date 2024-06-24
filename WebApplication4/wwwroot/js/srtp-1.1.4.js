@@ -1015,13 +1015,19 @@ function AddSerialRout( docEntry, sequence, posId, idRgSetup, timeRegisterId, re
                                     }
                                     else
                                     {
+                                        if (dados == 7) {
+                                            alert("Quantidade superior a resgistrada no ultimo Setor!");
+                                        }
+                                        else {
+                                            $('#serial').val("");
+                                            $('#data').html(dados);
 
-                                        $('#serial').val("");
-                                        $('#data').html(dados);
 
+                                            var s = $('table tbody tr').length;
+                                            $('#tbCount').html('Total: ' + s);
 
-                                        var s = $('table tbody tr').length;
-                                        $('#tbCount').html('Total: ' + s);
+                                        }
+                                        
                                     }
 
                                 }

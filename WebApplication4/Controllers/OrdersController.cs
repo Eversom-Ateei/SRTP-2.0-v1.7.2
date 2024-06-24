@@ -1410,83 +1410,85 @@ namespace WebApplication4.Controllers
                 }
                 else
                 {
-                    string QtdOk;
-                    if (VerifyQtyOnLastRout(docEntry, sequence, quantity) == "1")
-                    {
-                        QtdOk = "1";
-                    }
-                    else
-                    {
-                        QtdOk = "0";
-                    }
+
+                    string QtyOk = VerifyQtyOnLastRout(docEntry, sequence, quantity);
 
 
                     ////exigir o serial na ultima rota 0 sim 1 não
-                    if ((VerifySerialOnLastRout(docEntry, serial, sequence)) || (sequence - 1 == 1)/* || (VerifyLastRout(docEntry, sequence) == "1")*/)
+                    if (QtyOk == "1")
                     {
-                        if ((!VerifyIsExistOnRout(docEntry, serial, sequence)) || (VerifyBatchQuantity(docEntry, serial, sequence, quantity)))
+                        if (VerifySerialOnLastRout(docEntry, serial, sequence) || (sequence - 1 == 1))
                         {
-
-                            if (VerifyBatchQuantity(docEntry, serial, sequence, quantity) || (sequence - 1 == 1)/*VerifyLastRout(docEntry, sequence) == "1"*/)
+                            if ((!VerifyIsExistOnRout(docEntry, serial, sequence)) || (VerifyBatchQuantity(docEntry, serial, sequence, quantity)))
                             {
-                                conn.SqlNonQuery(" insert into ATEEI_SRTP_RG_N_SERIE_RECURSO(ORDEM,N_SERIE,USUARIO,RECURSO,DATA,SEQUENCIA,ID_RG_TEMPO,PosId,ID_RG_SETUP,Quantity) values (" + docEntry + ",'" + serial + "'," + user + ",'" + resource + "',getdate()," + sequence + "," + timeRegisterId + "," + posId + "," + idRgSetup + "," + quantity.ToString().Replace(",", ".") + ") ");
 
-                                conn.SqlNonQuery(" if (select COUNT(*) from ATEEI_SRTP_PRODUCT_TRACE_WO where SerialNumber = '" + serial + "')< 1 begin " +
-                                                 " insert ATEEI_SRTP_PRODUCT_TRACE_WO (ItemCode,PosId,DocEntry,SerialNumber,Quantity,AssemblyRout) " +
-                                                 " select T1.ItemCode,U_Pos_id,t1.DocEntry,'" + serial + "',(T1.BaseQty * " + quantity.ToString().Replace(",", ".") + ") as BaseQty ,U_AssemblyRout from OWOR T0 " +
-                                                 " INNER JOIN WOR1 T1 ON T0.DocEntry = T1.DocEntry " +
-                                                 " WHERE T0.DocEntry = " + docEntry + " " +
-                                                 " AND(U_alternativo_linha = U_Pos_id OR(U_alternativo_linha IS NULL AND U_Pos_id IS NOT NULL)) AND ItemType = 4 " +
-                                                 " end ");
-
-                                var data = conn.Connect(" SELECT top 1 T0.*,(CASE WHEN TERMINO IS NOT NULL THEN 1 ELSE 0 END) AS IsClose FROM ATEEI_SRTP_RG_N_SERIE_RECURSO T0 INNER JOIN ATEEI_SRTP_RG_TEMPO T1 ON T0.ID_RG_TEMPO = T1.ID WHERE T0.ORDEM = " + docEntry + " AND T0.SEQUENCIA = " + sequence + " and T0.PosId = " + posId + " and T0.id_rg_setup = " + idRgSetup + " and T0.ID_RG_TEMPO = " + timeRegisterId + "  order by data desc ");
-                                string html = "";
-                                int line = 1;
-                                while (data.Read())
+                                if (VerifyBatchQuantity(docEntry, serial, sequence, quantity) || (sequence - 1 == 1)/*VerifyLastRout(docEntry, sequence) == "1"*/)
                                 {
-                                    html = html + " <tr> " +
-                                      " <td> " + line + " </td> " +
-                                      " <td data-bs-toggle=\"tooltip\" data-bs-html=\"true\" title = \"ATEEI_SRTP_RG_N_SERIE_RECURSO.N_SERIE\" > " + data["N_serie"] + " </td> " +
-                                      " <td data-bs-toggle=\"tooltip\" data-bs-html=\"true\" title = \"ATEEI_SRTP_RG_N_SERIE_RECURSO.Quantity\" > " + data["Quantity"] + " </td > " +
-                                      " <td> <div style = \"background-image: url('../img/IconTrace.png');\" class=\"icon20x20\" style=\"color: black ; font-size: 15px;\" onclick=\"ProductTrace('" + data["N_serie"] + "'," + data["PosId"] + "," + docEntry + ")\"></div></td> " +
-                                      " <td> <div style = \"background-image: url('../img/IconTest.png');\" class=\"icon20x20\" id=\"linkCloseTimeRegiste\" style=\"color: black ; font-size: 15px; \" onclick=\"alert()\"></div></td> " +
-                                      " <td> <div style = \"background-image: url('../img/IconError.png');\" class=\"icon20x20\" id=\"linkCloseTimeRegiste\" style=\"color: black ; font-size: 15px; \" data-toggle=\"modal\" data-target=\"#id_" + data["ID"] + "\" ondblclick=\"ProductionFlaw('" + data["N_serie"] + "','" + resource + "'," + docEntry + "," + posId + ")\"></div> " +
-                                      " <td> <div style = \"background-image: url('../img/delete.png');\" class=\"icon20x20\" id=\"linkCloseTimeRegiste\" style=\"color: black ; font-size: 15px; \" data-toggle=\"modal\" data-target=\"#id_" + data["ID"] + "\" ondblclick=\" DeleteSerialRout('" + data["ID"] + "')\"></div> " +
-                                      " </tr> ";
+                                    conn.SqlNonQuery(" insert into ATEEI_SRTP_RG_N_SERIE_RECURSO(ORDEM,N_SERIE,USUARIO,RECURSO,DATA,SEQUENCIA,ID_RG_TEMPO,PosId,ID_RG_SETUP,Quantity) values (" + docEntry + ",'" + serial + "'," + user + ",'" + resource + "',getdate()," + sequence + "," + timeRegisterId + "," + posId + "," + idRgSetup + "," + quantity.ToString().Replace(",", ".") + ") ");
 
-                                    line++;
-                                }
+                                    conn.SqlNonQuery(" if (select COUNT(*) from ATEEI_SRTP_PRODUCT_TRACE_WO where SerialNumber = '" + serial + "')< 1 begin " +
+                                                     " insert ATEEI_SRTP_PRODUCT_TRACE_WO (ItemCode,PosId,DocEntry,SerialNumber,Quantity,AssemblyRout) " +
+                                                     " select T1.ItemCode,U_Pos_id,t1.DocEntry,'" + serial + "',(T1.BaseQty * " + quantity.ToString().Replace(",", ".") + ") as BaseQty ,U_AssemblyRout from OWOR T0 " +
+                                                     " INNER JOIN WOR1 T1 ON T0.DocEntry = T1.DocEntry " +
+                                                     " WHERE T0.DocEntry = " + docEntry + " " +
+                                                     " AND(U_alternativo_linha = U_Pos_id OR(U_alternativo_linha IS NULL AND U_Pos_id IS NOT NULL)) AND ItemType = 4 " +
+                                                     " end ");
 
-                                data.Close();
+                                    var data = conn.Connect(" SELECT top 1 T0.*,(CASE WHEN TERMINO IS NOT NULL THEN 1 ELSE 0 END) AS IsClose FROM ATEEI_SRTP_RG_N_SERIE_RECURSO T0 INNER JOIN ATEEI_SRTP_RG_TEMPO T1 ON T0.ID_RG_TEMPO = T1.ID WHERE T0.ORDEM = " + docEntry + " AND T0.SEQUENCIA = " + sequence + " and T0.PosId = " + posId + " and T0.id_rg_setup = " + idRgSetup + " and T0.ID_RG_TEMPO = " + timeRegisterId + "  order by data desc ");
+                                    string html = "";
+                                    int line = 1;
+                                    while (data.Read())
+                                    {
+                                        html = html + " <tr> " +
+                                          " <td> " + line + " </td> " +
+                                          " <td data-bs-toggle=\"tooltip\" data-bs-html=\"true\" title = \"ATEEI_SRTP_RG_N_SERIE_RECURSO.N_SERIE\" > " + data["N_serie"] + " </td> " +
+                                          " <td data-bs-toggle=\"tooltip\" data-bs-html=\"true\" title = \"ATEEI_SRTP_RG_N_SERIE_RECURSO.Quantity\" > " + data["Quantity"] + " </td > " +
+                                          " <td> <div style = \"background-image: url('../img/IconTrace.png');\" class=\"icon20x20\" style=\"color: black ; font-size: 15px;\" onclick=\"ProductTrace('" + data["N_serie"] + "'," + data["PosId"] + "," + docEntry + ")\"></div></td> " +
+                                          " <td> <div style = \"background-image: url('../img/IconTest.png');\" class=\"icon20x20\" id=\"linkCloseTimeRegiste\" style=\"color: black ; font-size: 15px; \" onclick=\"alert()\"></div></td> " +
+                                          " <td> <div style = \"background-image: url('../img/IconError.png');\" class=\"icon20x20\" id=\"linkCloseTimeRegiste\" style=\"color: black ; font-size: 15px; \" data-toggle=\"modal\" data-target=\"#id_" + data["ID"] + "\" ondblclick=\"ProductionFlaw('" + data["N_serie"] + "','" + resource + "'," + docEntry + "," + posId + ")\"></div> " +
+                                          " <td> <div style = \"background-image: url('../img/delete.png');\" class=\"icon20x20\" id=\"linkCloseTimeRegiste\" style=\"color: black ; font-size: 15px; \" data-toggle=\"modal\" data-target=\"#id_" + data["ID"] + "\" ondblclick=\" DeleteSerialRout('" + data["ID"] + "')\"></div> " +
+                                          " </tr> ";
 
-                                string ret = DoTraceSerialBatch(serial, docEntry, user, posId, idRgSetup, quantity);
+                                        line++;
+                                    }
 
-                                if (ret != "true")
-                                {
-                                    return ret;
+                                    data.Close();
+
+                                    string ret = DoTraceSerialBatch(serial, docEntry, user, posId, idRgSetup, quantity);
+
+                                    if (ret != "true")
+                                    {
+                                        return ret;
+                                    }
+                                    else
+                                    {
+                                        return html;
+                                    }
                                 }
                                 else
                                 {
-                                    return html;
+                                    return "6";
+
                                 }
                             }
                             else
                             {
-                                return "6";
-
+                                return "3";
                             }
                         }
                         else
                         {
-                            return "3";
+
+                            return "2";
+
                         }
+
                     }
                     else
                     {
-
-                        return "2";
-
+                        return "7";
                     }
+                    
                 }
             }
             catch (Exception e)
@@ -1498,22 +1500,29 @@ namespace WebApplication4.Controllers
         public string VerifyQtyOnLastRout(int docEntry, int rout, double qty)
         {
 
-            string ret = "";
+            string ret;
             double qtyOnLastRout = 0;
+            double qtyOnRout = 0;
             try
             {
 
                 var conn = new SQLConnection(_context);
-                string query = "SELECT * FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + rout.ToString() + " ";
+                string query = "SELECT SUM(QUANTIDADE) AS QUANTIDADE FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + (rout - 1) + " ";
                 var QtyOnLastRoat = conn.Connect(query);
                 while (QtyOnLastRoat.Read())
                 {
-                    qtyOnLastRout = double.Parse(QtyOnLastRoat["QUANTIDADE"].ToString()) + qtyOnLastRout;
+                    qtyOnLastRout = double.Parse(QtyOnLastRoat["QUANTIDADE"].ToString());
                 }
                 QtyOnLastRoat.Close();
 
-               
-              
+                query = "SELECT SUM(QUANTIDADE) AS QUANTIDADE FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + rout + " ";
+                var QtyOnRoat = conn.Connect(query);
+                while (QtyOnRoat.Read())
+                {
+                    qtyOnRout = double.Parse(QtyOnRoat["QUANTIDADE"].ToString());
+                }
+
+                ret = qtyOnLastRout >= (qty + qtyOnRout) ? "1" : "0";
             }
             catch (Exception e)
             {
