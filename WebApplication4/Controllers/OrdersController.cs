@@ -1410,15 +1410,16 @@ namespace WebApplication4.Controllers
                 }
                 else
                 {
-                    //string QtdOk;
-                    //if (VerifyQtyOnLastRout(docEntry, sequence, quantity) == "1"){
-                    //    QtdOk = "1";
-                    //}
-                    //else
-                    //{
-                    //    QtdOk = "0";
-                    //}
-                    
+                    string QtdOk;
+                    if (VerifyQtyOnLastRout(docEntry, sequence, quantity) == "1")
+                    {
+                        QtdOk = "1";
+                    }
+                    else
+                    {
+                        QtdOk = "0";
+                    }
+
 
                     ////exigir o serial na ultima rota 0 sim 1 não
                     if ((VerifySerialOnLastRout(docEntry, serial, sequence)) || (sequence - 1 == 1)/* || (VerifyLastRout(docEntry, sequence) == "1")*/)
@@ -1503,7 +1504,7 @@ namespace WebApplication4.Controllers
             {
 
                 var conn = new SQLConnection(_context);
-                string query = "SELECT * FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + 1 + " ";
+                string query = "SELECT * FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + rout.ToString() + " ";
                 var QtyOnLastRoat = conn.Connect(query);
                 while (QtyOnLastRoat.Read())
                 {
@@ -1516,7 +1517,7 @@ namespace WebApplication4.Controllers
             }
             catch (Exception e)
             {
-                ret = "0";
+                ret = e.ToString();
             }
             return ret;
         }
@@ -1959,7 +1960,7 @@ namespace WebApplication4.Controllers
             {
                 SQLConnection conn = new SQLConnection(_context);
 
-                var result = conn.Connect("SELECT * FROM ATEEI_SRTP_RG_N_SERIE_RECURSO where N_SERIE = '" + serial + "' and SEQUENCIA = " + sequence + " and ORDEM = " + docEntry + "");
+                var result = conn.Connect("SELECT * FROM ATEEI_SRTP_RG_N_SERIE_RECURSO where N_SERIE = '" + serial + "' and SEQUENCIA = " + sequence.ToString() + " and ORDEM = " + docEntry + "");
 
                 if (result.HasRows)
                 {
