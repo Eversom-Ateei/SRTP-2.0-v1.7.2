@@ -3688,3 +3688,4 @@ C:\Users\Eversom.Fragozo\Desktop\Projetos\SRTP\Eversom\SRTP 2.0 v1.7.2 (Postada)
 C:\Users\Eversom.Fragozo\Desktop\Projetos\SRTP\Eversom\SRTP 2.0 v1.7.2 (Postada)\WebApplication4\obj\Debug\netcoreapp3.1\WebApplication4.dll
 C:\Users\Eversom.Fragozo\Desktop\Projetos\SRTP\Eversom\SRTP 2.0 v1.7.2 (Postada)\WebApplication4\obj\Debug\netcoreapp3.1\WebApplication4.pdb
 C:\Users\Eversom.Fragozo\Desktop\Projetos\SRTP\Eversom\SRTP 2.0 v1.7.2 (Postada)\WebApplication4\obj\Debug\netcoreapp3.1\WebApplication4.genruntimeconfig.cache
+C:\Users\Eversom.Fragozo\Desktop\Projetos\SRTP\Eversom\SRTP 2.0 v1.7.2 (Postada)\WebApplication4\obj\Debug\netcoreapp3.1\WebApplication4.csproj.AssemblyReference.cache

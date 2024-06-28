@@ -1509,7 +1509,7 @@ namespace WebApplication4.Controllers
             {
 
                 var conn = new SQLConnection(_context);
-                string query = "SELECT SUM(QUANTIDADE) AS QUANTIDADE FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + (rout - 1) + " ";
+                string query = "SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) AS QUANTIDADE FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + (rout - 1) + " ";
                 var QtyOnLastRoat = conn.Connect(query);
                 while (QtyOnLastRoat.Read())
                 {
@@ -1517,12 +1517,16 @@ namespace WebApplication4.Controllers
                 }
                 QtyOnLastRoat.Close();
 
-                query = "SELECT SUM(QUANTIDADE) AS QUANTIDADE FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + rout + " ";
+                query = "SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) AS QUANTIDADE FROM ATEEI_SRTP_RG_TEMPO WHERE ORDEM = " + docEntry + " AND SEQUENCIA = " + rout + " ";
                 var QtyOnRoat = conn.Connect(query);
-                while (QtyOnRoat.Read())
+                if (QtyOnRoat.HasRows)
                 {
-                    qtyOnRout = double.Parse(QtyOnRoat["QUANTIDADE"].ToString());
-                }QtyOnRoat.Close();
+                    while (QtyOnRoat.Read())
+                    {
+                        qtyOnRout = double.Parse(QtyOnRoat["QUANTIDADE"].ToString());
+                    }
+                    QtyOnRoat.Close();
+                }
 
                 ret = qtyOnLastRout >= (qty + qtyOnRout) ? "1" : "0";
             }
